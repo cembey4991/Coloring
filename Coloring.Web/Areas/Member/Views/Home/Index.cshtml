@@ -1,0 +1,140 @@
+﻿@model ColorAddViewModel
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var imageAreas = ViewBag.ImageAreas;
+}
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+        <table id="imageColorTable" class=" mt-4 table table-sm table-bordered">
+            <thead>                  
+               @foreach (var item in imageAreas)
+                    {
+                         <tr>
+                            <td tdid="@(item.Id)" id="td@(item.Id)">Alan @(item.Id)</td>
+                            <td>    <select asp-for="ColorName" class="colorSelect" asp-items="@ViewBag.Colors" id="@(item.Id)">
+                    <option hidden value="-1">Seçiniz</option>
+                </select>
+                </td>
+                         </tr>
+                    }                                 
+            
+            </thead>
+  
+        </table>
+
+    </div>
+    <div class="col-md-2"></div>
+</div>
+<div class="row">
+    <div class="col-md-2">    </div>
+
+    <div class="col-md-8">
+
+     
+
+      
+        <div class="form-group mt-4 text-center">
+            <button type="button" class="btn btn-info btn-sm" id="Save">Kaydet</button>
+
+        </div>
+    </div>
+    <div class="col-md-2">
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.colorSelect').change(function () {
+                var fieldId = $(this).attr("id");
+                var selectedId = $(this).val();
+                if (selectedId == "1") {
+                    $("#td" + fieldId).css('background', 'red')
+
+                        }
+                if (selectedId == "2") {
+                    $("#td" + fieldId).css('background', 'yellow')
+
+                }
+                if (selectedId == "3") {
+                    $("#td" + fieldId).css('background', 'green')
+
+                }
+                });
+
+            $("#Save").click(function () {
+            var colorImages =[] ;
+            $("#imageColorTable > thead > tr").each(function () {
+                    var id = $(this).find('td').eq(0).attr("tdid");
+                    var colorId= $("#"+id).val();
+                 colorImages.push({"imageAreaId":id, "colorId":colorId});
+            });
+       
+            debugger;
+            $.post('@Url.Action("ColorImageSave","Home",new { Area="Member"})', { colorImages: colorImages },
+   //function () {
+   //     $('#result').html('"PassThings()" successfully called.');
+   );
+
+             //$.ajax({
+             //           ContentType: 'application/json; charset=utf-8',
+             //           dataType: 'json',
+             //           type: "POST",
+             //           url: "@Url.Action("ColorImageSave","Home",new { Area="Member"})",
+             //           data:colorImages,
+             //           success: function (response) {
+             //               //var responseObj=jQuery.parseJSON(response);
+             //               alert("Başarıyla eklendi")
+             //           },
+             //           error: function (response) {
+             //               alert(response);
+             //           }
+             //       });
+            });
+            //var selectColor;
+            //$('#selectColor').change(function () {
+            //    selectColor = $('#selectColor option:selected').text();
+            //    // console.log(selectColor)
+            //});
+
+            //$(".field").click(function () {
+            //    var fieldId = $(this).attr('id');
+
+            //    if (selectColor == "Kırmızı") {
+            //        $("#" + fieldId).css('background', 'red')
+
+            //    }
+            //    else if (selectColor == "Sarı") {
+
+            //        $("#" + fieldId).css('background', 'yellow')
+
+            //    }
+            //    else if (selectColor == "Yeşil") {
+            //        $("#" + fieldId).css('background', 'green')
+            //    }
+            //});
+               //$("#Save").click(function () {
+                //    var color = {
+                //        ColorName: $('#selectColor option:selected').text(),
+                //        AppUserId: @ViewBag.UserId
+                //           }
+                //    var theColor = JSON.stringify(color);
+                //    console.log(theColor);
+                //    $.ajax({
+                //        type: "POST",
+                //        url: "@Url.Action("Index","Home",new { Area="Member"})",
+                //        data: color,
+                //        success: function (response) {
+                //            //var responseObj=jQuery.parseJSON(response);
+                //            alert("Başarıyla eklendi")
+                //        },
+                //        error: function (response) {
+                //            alert(response);
+                //        }
+                //    });
+                //});
+
+        });
+    </script>
+    }
